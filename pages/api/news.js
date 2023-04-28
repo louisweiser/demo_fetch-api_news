@@ -1,5 +1,22 @@
-export default function handler(req, res) {
-  res.status(200).json({ name: "John Doe" });
+export default async function handler(req, res) {
+  const response = await fetch(
+    `https://newsapi.org/v2/everything?q=bitcoin&apiKey=${process.env.API_KEY}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    res
+      .status(500)
+      .json({ error: `An error occurred: ${response.statusText}` });
+    return;
+  }
+
+  const data = await response.json();
+  res.status(200).json(data);
 }
 
 /* const response = {
